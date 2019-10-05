@@ -2,11 +2,14 @@ package com.example.bikefinder;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Date;
 
 public class DatabaseHandler extends SQLiteOpenHelper{
 
@@ -23,7 +26,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table" + TABLE_NAME + " (coordinates1 FLOAT,coordinates2 FLOAT, time TEXT)");
+        db.execSQL("CREATE TABLE" + TABLE_NAME + " (coordinates1 DOUBLE,coordinates2 DOUBLE, time STRING)");
     }
 
     @Override
@@ -31,7 +34,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         db.execSQL("DROP TABLE IF EXISTS " +  TABLE_NAME);
         onCreate(db);
     }
-    public boolean insertData(float coordinates1, float coordinates2, String time){
+    public boolean insertData(double coordinates1, double coordinates2, String time){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_1, coordinates1);
@@ -42,8 +45,11 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             return false;
         else
             return true;
+    }
 
-
-
+    public Cursor getAllData(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME, null);
+        return res;
     }
 }

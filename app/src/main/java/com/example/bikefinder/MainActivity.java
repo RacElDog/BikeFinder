@@ -8,11 +8,13 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.icu.util.Calendar;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import java.util.Date;
 
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DatabaseHandler myDb;
+        final DatabaseHandler myDb;
         myDb = new DatabaseHandler(this);
 
 
@@ -62,6 +64,15 @@ public class MainActivity extends AppCompatActivity{
             public void onLocationChanged(Location location) {
                  Log.i("Location", location.toString());
                  Log.i("Speed", "" + location.getSpeed());
+                 double coordinates1 = location.getLatitude();
+                 double coordinates2 = location.getLongitude();
+                 String time = Calendar.getInstance().getTime().toString();
+                 boolean isInserted = myDb.insertData(coordinates1,coordinates2,time);
+                 if (isInserted)
+                     Log.i("database", "hey, there is new data!!!");
+                 else
+                     Log.i("database", "hey, there is NO new data");
+
             }
 
             @Override
@@ -101,6 +112,9 @@ public class MainActivity extends AppCompatActivity{
             Log.i("Location Permission", "Already Granted");
         }
     }
+
+
+
 
 }
 
