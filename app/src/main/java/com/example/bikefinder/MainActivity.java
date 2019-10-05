@@ -1,46 +1,91 @@
 package com.example.bikefinder;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.icu.util.Calendar;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
-
-import android.hardware.SensorManager;
-import android.hardware.SensorEventListener;
-import android.widget.TextView;
+import android.util.Log;
+import java.util.Date;
 
 
+public class MainActivity extends AppCompatActivity{
+    LocationManager locationManager;
+    LocationListener locationListener;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener{
-    DatabaseHandler myDb;
 
-    Sensor sensor;
-    TextView text;
-    SensorManager sensorManager;
-    SensorEventListener sensorEventListener;
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                Log.i("location manager set", "yes");
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,  10000, 0, locationListener);
+            }
+            else{
+                Log.i("Location pERmission", "denied");
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final DatabaseHandler myDb;
         myDb = new DatabaseHandler(this);
 
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                 Log.i("Location", location.toString());
+                 Log.i("Speed", "" + location.getSpeed());
+                 double coordinates1 = location.getLatitude();
+                 double coordinates2 = location.getLongitude();
+                 String time = Calendar.getInstance().getTime().toString();
+                 boolean isInserted = myDb.insertData(coordinates1,coordinates2,time);
+                 if (isInserted)
+                     Log.i("database", "hey, there is new data!!!");
+                 else
+                     Log.i("database", "hey, there is NO new data");
 
-        text = findViewById(R.id.hi);
+            }
 
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            Log.i("Location Permission", "Requested");
+        }else{
+            Log.i("Location Permission", "Already Granted");
+        }
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        text.setText("X: " + event.values[0] + "\nY: " + event.values[1] + "\nZ: " + event.values[2]);
-    }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-    }
+
 }
+
