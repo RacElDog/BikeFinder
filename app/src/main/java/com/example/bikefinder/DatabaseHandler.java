@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +27,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE" + TABLE_NAME + " (coordinates1 DOUBLE,coordinates2 DOUBLE, time STRING)");
+        db.execSQL(String.format("CREATE TABLE %s (coordinates1 DOUBLE,coordinates2 DOUBLE, time STRING)", TABLE_NAME));
     }
 
     @Override
