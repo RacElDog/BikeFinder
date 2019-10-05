@@ -2,6 +2,12 @@ package com.example.bikefinder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+<<<<<<< HEAD
+
+import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+=======
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -12,10 +18,19 @@ import android.icu.util.Calendar;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+>>>>>>> 6612ed6a6e8cbf7cb2ce6e09bec3a537f7b1cf1f
 import android.os.Bundle;
 import android.util.Log;
 import java.util.Date;
 
+<<<<<<< HEAD
+import android.hardware.SensorManager;
+import android.hardware.SensorEventListener;
+import android.view.View;
+import android.webkit.WebView;
+import android.widget.AdapterView;
+=======
+>>>>>>> 6612ed6a6e8cbf7cb2ce6e09bec3a537f7b1cf1f
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,12 +40,35 @@ import java.util.ArrayList;
 
 
 
+<<<<<<< HEAD
+        listView.setAdapter(arrayAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    Intent intent = new Intent(view.getContext(), MapsActivity.class);
+                    startActivityForResult(intent,0);
+                }
+                if (position == 1) {
+                    Intent intent = new Intent(view.getContext(), MapsActivity2.class);
+                    startActivityForResult(intent,1);
+                }
+                if (position == 2) {
+                    Intent intent = new Intent(view.getContext(), MapsActivity.class);
+                    startActivityForResult(intent,2);
+                }
+            }
+        });
+    }
+=======
 
 
 
 public class MainActivity extends AppCompatActivity{
     LocationManager locationManager;
     LocationListener locationListener;
+>>>>>>> 6612ed6a6e8cbf7cb2ce6e09bec3a537f7b1cf1f
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
