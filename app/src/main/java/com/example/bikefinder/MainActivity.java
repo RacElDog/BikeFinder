@@ -14,11 +14,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-import java.util.Date;
 
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -88,21 +86,7 @@ public class MainActivity extends AppCompatActivity{
             public void onProviderDisabled(String provider) {
 
             }
-          
-          
-          listView = (ListView)findViewById(R.id.listview);
 
-          ArrayList<String> arrayList = new ArrayList<>();
-
-          arrayList.add("1st location");
-          arrayList.add("2nd location");
-          arrayList.add("3rd location");
-
-          ArrayAdapter arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,arrayList);
-
-          listView.setAdapter(arrayAdapter);
-          
-          
           
         };
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
@@ -111,6 +95,19 @@ public class MainActivity extends AppCompatActivity{
         }else{
             Log.i("Location Permission", "Already Granted");
         }
+
+        listView = (ListView)findViewById(R.id.listview);
+
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        arrayList.add("1st location");
+        arrayList.add("2nd location");
+        arrayList.add("3rd location");
+
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,arrayList);
+
+        listView.setAdapter(arrayAdapter);
+
     }
 
 
